@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ButtonDemo" default="default" basedir=".">
+
+	<taskdef name="bundleapp" classname="com.oracle.appbundler.AppBundlerTask" classpath="lib/appbundler-1.0.jar" />
+
+	<target name="default">
+
+		<jar destfile="dist/io.dimitris.scriptbar.jar">
+			<fileset dir="bin"/>
+		</jar>
+		
+		<delete file="dist/ScriptBar.dmg"/>
+		<delete dir="dist/ScriptBar.app"/>
+
+		<bundleapp outputdirectory="dist" name="ScriptBar" displayname="ScriptBar" identifier="ScriptBar" mainclassname="io.dimitris.scriptbar.ScriptBar" icon="resources/scriptbar.icns">
+			<classpath file="dist/io.dimitris.scriptbar.jar"/>
+			<!--option value="-Dapple.laf.useScreenMenuBar=true"/-->
+			<option value="-Duser.dir=$APP_ROOT/Contents/Home/"/>
+			<!--option value="-Dapple.awt.UIElement=true"/-->
+		</bundleapp>
+
+		<copydir src="resources" dest="dist/ScriptBar.app/Contents/Home/resources"/>
+		<copydir src="scripts" dest="dist/ScriptBar.app/Contents/Home/scripts"/>
+		
+		<exec executable="hdiutil">
+			<arg line="create -srcfolder dist/ScriptBar.app dist/ScriptBar.dmg"/>
+		</exec>
+		
+	</target>
+
+</project>
