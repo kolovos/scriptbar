@@ -8,6 +8,8 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -60,12 +62,20 @@ public class ScriptBar extends JDialog {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("AppleScript");
-						try {
-							scriptEngine.eval(new FileReader(scriptFile));
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						}
+						
+						new Timer().schedule(new TimerTask() {
+							
+							@Override
+							public void run() {
+								ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("AppleScript");
+								try {
+									scriptEngine.eval(new FileReader(scriptFile));
+								} catch (Exception ex) {
+									ex.printStackTrace();
+								}
+							}
+						}, 0);
+						
 					}
 				});
 				buttons.add(button);
