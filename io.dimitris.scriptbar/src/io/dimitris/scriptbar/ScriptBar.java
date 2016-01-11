@@ -8,6 +8,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -69,7 +70,9 @@ public class ScriptBar extends JDialog {
 							public void run() {
 								ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("AppleScript");
 								try {
-									scriptEngine.eval(new FileReader(scriptFile));
+									String script = new Scanner(scriptFile).useDelimiter("\\Z").next();
+									script = "with timeout of 3600 seconds\n" + script + "\n" + "end timeout";
+									scriptEngine.eval(script);
 								} catch (Exception ex) {
 									ex.printStackTrace();
 								}
