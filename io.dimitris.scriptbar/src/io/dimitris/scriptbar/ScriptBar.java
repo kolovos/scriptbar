@@ -1,8 +1,6 @@
 package io.dimitris.scriptbar;
 
 import java.awt.Component;
-import java.awt.Container;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +9,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -20,12 +17,10 @@ import java.util.TimerTask;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JList;
-import javax.swing.ListCellRenderer;
+import javax.swing.UIManager;
 
 public class ScriptBar extends JDialog {
 	
@@ -33,6 +28,7 @@ public class ScriptBar extends JDialog {
 	protected GridLayout gridLayout = new GridLayout(1,1);
 	
 	public static void main(String[] args) throws Exception {
+		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		new ScriptBar().run();
 	}
 
@@ -64,10 +60,10 @@ public class ScriptBar extends JDialog {
         });
 		
 		this.getContentPane().setLayout(gridLayout);
-		this.setTitle("ScriptBar");
+		//this.setTitle("ScriptBar");
 		this.setBounds(100, 100, 500, 500);
 		this.setAlwaysOnTop(true);
-		
+		this.setResizable(false);
 		setProfile(profiles[0]);
 		
 		this.setVisible(true);
@@ -106,6 +102,8 @@ public class ScriptBar extends JDialog {
 							public void run() {
 								ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("AppleScript");
 								try {
+									System.out.println(scriptFile.exists());
+									//String script = new String(Files.readAllBytes(scriptFile.toPath()));
 									String script = new Scanner(scriptFile).useDelimiter("\\Z").next();
 									script = "with timeout of 3600 seconds\n" + script + "\n" + "end timeout";
 									scriptEngine.eval(script);
