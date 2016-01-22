@@ -14,6 +14,7 @@
 
 		<bundleapp outputdirectory="dist" name="ScriptBar" displayname="ScriptBar" identifier="ScriptBar" mainclassname="io.dimitris.scriptbar.ScriptBar" icon="resources/scriptbar.icns">
 			<classpath file="dist/io.dimitris.scriptbar.jar"/>
+			<classpath file="lib/org.apache.commons.lang3_3.1_3.1.0.jar"/>
 			<!--option value="-Dapple.laf.useScreenMenuBar=true"/-->
 			<option value="-Duser.dir=$APP_ROOT/Contents/Home/"/>
 			<!--option value="-Dapple.awt.UIElement=true"/-->
