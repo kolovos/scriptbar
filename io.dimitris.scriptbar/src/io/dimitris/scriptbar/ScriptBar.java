@@ -2,6 +2,9 @@ package io.dimitris.scriptbar;
 
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -21,6 +24,10 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.UIManager;
+
+import org.eclipse.epsilon.egl.EglTemplateFactory;
+import org.eclipse.epsilon.egl.EglTemplateFactoryModuleAdapter;
+import org.eclipse.epsilon.emc.plainxml.PlainXmlModel;
 
 public class ScriptBar extends JDialog {
 	
@@ -87,40 +94,78 @@ public class ScriptBar extends JDialog {
 		
 		// Add new buttons
 		
-		for (final File scriptFile :  profile.getCanonicalFile().listFiles()) {
-			if (scriptFile.getName().endsWith("applescript")) {
-				final JButton button = new JButton(scriptFile.getName().replace(".applescript", ""));
-				this.getContentPane().add(button);
-				button.addActionListener(new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent e) {
+		for (final File file :  profile.getCanonicalFile().listFiles()) {
+			
+			for (final String extension : new String[]{"applescript", "egl"}) {
+			
+				if (file.getName().endsWith("." + extension) && !file.getName().startsWith("_")) {
+					final JButton button = new JButton(file.getName().replace("." + extension, ""));
+					this.getContentPane().add(button);
+					button.addActionListener(new ActionListener() {
 						
-						new Timer().schedule(new TimerTask() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
 							
-							@Override
-							public void run() {
-								ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("AppleScript");
-								try {
-									System.out.println(scriptFile.exists());
-									//String script = new String(Files.readAllBytes(scriptFile.toPath()));
-									String script = new Scanner(scriptFile).useDelimiter("\\Z").next();
-									script = "with timeout of 3600 seconds\n" + script + "\n" + "end timeout";
-									scriptEngine.eval(script);
-								} catch (Exception ex) {
-									ex.printStackTrace();
+							new Timer().schedule(new TimerTask() {
+								
+								@Override
+								public void run() {
+									try {
+										if ("applescript".equalsIgnoreCase(extension)) runAppleScript(file);
+										else {
+											String result = (runEgl(file) + "").trim();
+											StringSelection stringSelection = new StringSelection(result);
+											Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
+											clpbrd.setContents(stringSelection, null);
+										}
+									} catch (Exception ex) {
+										ex.printStackTrace();
+									}
 								}
-							}
-						}, 0);
-						
-					}
-				});
-				buttons.add(button);
+							}, 0);
+							
+						}
+					});
+					buttons.add(button);
+				}
 			}
 		}
+			
 		
 		gridLayout.setRows(buttons.size()+1);;
 		this.pack();
+	}
+	
+	public Object runAppleScript(File scriptFile) throws Exception {
+		ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("AppleScript");
+		String script = new Scanner(scriptFile).useDelimiter("\\Z").next();
+		script = "with timeout of 3600 seconds\n" + script + "\n" + "end timeout";
+		return scriptEngine.eval(script);
+	}
+	
+	public Object runEgl(File template) throws Exception {
+		
+		PlainXmlModel model = null;
+		
+		for (File file : template.getParentFile().getCanonicalFile().listFiles()) {
+			if (file.getName().equals("_xml.applescript")) {
+				model = new PlainXmlModel();
+				String xml = runAppleScript(file) + "";
+				model.setName("M");
+				model.setXml("<?xml version=\"1.0\"?>" + xml.trim());
+				model.setReadOnLoad(true);
+				model.setStoredOnDisposal(false);
+				model.load();
+			}
+		}
+		
+		EglTemplateFactoryModuleAdapter module = new EglTemplateFactoryModuleAdapter(new EglTemplateFactory());
+		module.parse(template);
+		if (model != null) {
+			module.getContext().getModelRepository().addModel(model);
+		}
+		return module.execute();
+		
 	}
 	
 }
