@@ -1,6 +1,6 @@
 tell application "Skim"
 	activate
-	set xml to "<document>" & return
+	set xml to "<document name=" & quote & name of document 1 & quote & ">" & return
 	set lastPage to count pages of document 1
 	set firstPage to 1
 	
