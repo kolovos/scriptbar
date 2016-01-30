@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -101,6 +103,7 @@ public class ScriptBar extends JDialog {
 				if (file.getName().endsWith("." + extension) && !file.getName().startsWith("_")) {
 					final JButton button = new JButton(file.getName().replace("." + extension, ""));
 					this.getContentPane().add(button);
+					
 					button.addActionListener(new ActionListener() {
 						
 						@Override
@@ -111,7 +114,9 @@ public class ScriptBar extends JDialog {
 								@Override
 								public void run() {
 									try {
-										if ("applescript".equalsIgnoreCase(extension)) runAppleScript(file);
+										if ("applescript".equalsIgnoreCase(extension)) {
+											runAppleScript(file);
+										}
 										else {
 											String result = (runEgl(file) + "").trim();
 											StringSelection stringSelection = new StringSelection(result);

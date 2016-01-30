@@ -1,0 +1,22 @@
+[%
+var notes : Sequence;
+
+for (page in t_page.all) {
+	notes.addAll(page.c_note.sortBy(n|n.e_bounds.i_y));
+}
+%]
+[%for (note in notes.select(n|n.isReview())){%]
+[%=note.e_text.text%]
+
+[%}%]
+
+Minor comments
+---
+[%for (note in notes.reject(n|n.isReview())){%]
+Page [%=note.parentNode.i_number%]: [%=note.e_text.text%]
+[%}%]
+[%
+operation t_note isReview() {
+	return self.e_color.i_red = 8541;
+}
+%]
