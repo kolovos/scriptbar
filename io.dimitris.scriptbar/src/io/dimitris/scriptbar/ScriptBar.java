@@ -29,7 +29,9 @@ import javax.swing.UIManager;
 
 import org.eclipse.epsilon.egl.EglTemplateFactory;
 import org.eclipse.epsilon.egl.EglTemplateFactoryModuleAdapter;
+import org.eclipse.epsilon.egl.exceptions.EglRuntimeException;
 import org.eclipse.epsilon.emc.plainxml.PlainXmlModel;
+import org.eclipse.epsilon.eol.execute.context.Variable;
 
 public class ScriptBar extends JDialog {
 	
@@ -124,6 +126,17 @@ public class ScriptBar extends JDialog {
 											clpbrd.setContents(stringSelection, null);
 										}
 									} catch (Exception ex) {
+										
+										Throwable t;
+										
+										if (ex instanceof EglRuntimeException) {
+											t = ex.getCause();
+										}
+										else {
+											t = ex;
+										}
+										
+										GrowlEngine.getInstance().show(file.getName(), t.getMessage());
 										ex.printStackTrace();
 									}
 								}
@@ -166,6 +179,12 @@ public class ScriptBar extends JDialog {
 		
 		EglTemplateFactoryModuleAdapter module = new EglTemplateFactoryModuleAdapter(new EglTemplateFactory());
 		module.parse(template);
+		if (module.getParseProblems().size() > 0) {
+			throw new RuntimeException(module.getParseProblems().get(0).toString());
+		}
+		
+		module.getContext().getFrameStack().put(Variable.createReadOnlyVariable("growl", GrowlEngine.getInstance()));
+		
 		if (model != null) {
 			module.getContext().getModelRepository().addModel(model);
 		}
