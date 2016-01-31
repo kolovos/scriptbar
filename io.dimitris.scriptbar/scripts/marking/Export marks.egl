@@ -1,0 +1,47 @@
+[%
+var notes : Sequence;
+
+for (page in t_page.all) {
+	notes.addAll(page.c_note.sortBy(n|n.e_bounds.i_y));
+}
+
+var examNumberNote = notes.selectOne(n|n.isPink());
+notes = notes.excluding(examNumberNote);
+
+for (note in notes) note.parse();
+
+var totalMarks = notes.collect(n|n.~marks).sum();
+var totalMaximumMarks = notes.collect(n|n.~maximumMarks).sum();
+
+%]
+
+[%
+for (note in notes){ 
+	note.parse();
+%]
+[%=note.~question%] ([%=note.~marks%]/[%=note.~maximumMarks%]): [%=note.~feedback%]
+
+[%}%]
+
+Total: [%=totalMarks%]/[%=totalMaximumMarks%]
+
+[%
+growl.show(examNumberNote.e_text.text,totalMarks + "/" + totalMaximumMarks); 
+
+operation t_note isPink() {
+	return self.e_color.i_red = 64620;
+}
+
+operation t_note parse() {
+	var parts = self.e_text.text.split("--");
+	self.~question = parts[0].trim();
+	var markParts = parts[1].trim().split("/");
+	self.~marks = markParts[0].asInteger();
+	self.~maximumMarks = markParts[1].asInteger();
+	var feedback = "";
+	if (parts.size() == 3) {
+		feedback = parts[2].trim();
+	}
+	self.~feedback = feedback;
+}
+%]
