@@ -29,17 +29,19 @@ tell application "Skim"
 	# Example: pdftk exp.pdf cat 1 2 3 output red.pdf
 	
 	set pathInit to "PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin; "
-	set pdfTkScript to pathInit & "pdftk " & exportedFileName & " cat "
+	set pdfTkScript to pathInit & "pdftk " & quote & exportedFileName & quote & " cat "
 	repeat with pageNumber in pagesWithNotes
 		set pdfTkScript to pdfTkScript & pageNumber & " "
 	end repeat
-	set pdfTkScript to pdfTkScript & " output " & redactedFileName
+	set pdfTkScript to pdfTkScript & " output " & quote & redactedFileName & quote
+	
+	log pdfTkScript
 	
 	do shell script pdfTkScript
 	
 	# Delete intermediate exported file
 	
-	set rmScript to pathInit & " rm " & exportedFileName
+	set rmScript to pathInit & " rm " & quote & exportedFileName & quote
 	do shell script rmScript
 	
 end tell
