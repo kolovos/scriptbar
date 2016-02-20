@@ -7,8 +7,7 @@ tell application "Skim"
 	
 	tell document 1
 		set selectedText to ((get text for (get selection)) as string)
-		set noteText to the text returned of (display dialog "Discuss '" & selectedText & "'" default answer "")
-		set noteText to "[Discuss] " & noteText
+		set noteText to selectedText
 		make note with properties {type:highlight note, selection:selection, text:noteText, color:spring green}
 	end tell
 	

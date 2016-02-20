@@ -17,7 +17,7 @@ public class GrowlEngine {
 		
 	}
 	
-	public void show(String title, String description) {
+	public void show(Object title, Object description) {
 		
 		String applicationName = "ScriptBar";
 		

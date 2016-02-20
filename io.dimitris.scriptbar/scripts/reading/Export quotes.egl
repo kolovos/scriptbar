@@ -1,0 +1,23 @@
+[%
+var notes : Sequence;
+
+for (page in t_page.all) {
+	notes.addAll(page.c_note.sortBy(n|n.e_bounds.i_y));
+}
+
+var titleNote = notes.selectOne(n|n.isGreen());
+notes = notes.excluding(titleNote);
+%]
+
+[%=titleNote.e_text.text%]
+
+[%for (note in notes){%]
+Page [%=note.parentNode.a_number%]: [%=note.e_text.text%]
+
+[%}%]
+
+[%
+operation t_note isGreen() {
+	return self.e_color.i_red = 8541;
+}
+%]
