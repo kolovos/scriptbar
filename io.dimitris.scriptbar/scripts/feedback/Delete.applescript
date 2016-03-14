@@ -1,3 +1,4 @@
+# Strikes through the selection
 tell application "Skim"
 	activate
 	

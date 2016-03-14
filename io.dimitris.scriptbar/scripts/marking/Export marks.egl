@@ -1,4 +1,4 @@
-[%
+[%// Exports marks and feedback for the selected exam number as text
 var notes : Sequence;
 
 for (page in t_page.all) {

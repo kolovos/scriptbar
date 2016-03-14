@@ -13,7 +13,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -27,6 +29,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.UIManager;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.eclipse.epsilon.egl.EglTemplateFactory;
 import org.eclipse.epsilon.egl.EglTemplateFactoryModuleAdapter;
 import org.eclipse.epsilon.egl.exceptions.EglRuntimeException;
@@ -101,9 +104,33 @@ public class ScriptBar extends JDialog {
 		for (final File file :  profile.getCanonicalFile().listFiles()) {
 			
 			for (final String extension : new String[]{"applescript", "egl"}) {
-			
+				
 				if (file.getName().endsWith("." + extension) && !file.getName().startsWith("_")) {
 					final JButton button = new JButton(file.getName().replace("." + extension, ""));
+					
+					try {
+						BufferedReader br = new BufferedReader(new FileReader(file));
+						String firstLine = br.readLine();
+						br.close();
+						String tooltip = null;
+						if (extension.equalsIgnoreCase("applescript")) {
+							if (firstLine.startsWith("#")) {
+								tooltip = firstLine.substring(2).trim();
+							}
+						}
+						else {
+							if (firstLine.startsWith("[%//")) {
+								tooltip = firstLine.substring(4).trim();
+							}
+						}
+						
+						if (tooltip != null) {
+							button.setToolTipText("<html>" + WordUtils.wrap(tooltip, 40, "<br>", true) + "</html>");
+						}
+						
+					}
+					catch (Exception ex) {}
+					
 					this.getContentPane().add(button);
 					
 					button.addActionListener(new ActionListener() {

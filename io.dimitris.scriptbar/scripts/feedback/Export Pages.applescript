@@ -1,7 +1,8 @@
+# Exports a PDF with embedded notes that contains only the commented pages, next to the original PDF
 tell application "Skim"
 	activate
-	set lastPage to count pages of document 1
 	set firstpage to 1
+	set lastPage to count pages of document 1
 	
 	# Collect all numbers of pages with notes
 	

@@ -1,3 +1,4 @@
+# Recommends that the first character of the selection is turned to lowercase
 tell application "Skim"
 	activate
 

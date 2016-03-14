@@ -1,3 +1,4 @@
+# Pops up a dialog to enter a comment on the selection
 tell application "Skim"
 	activate
 	

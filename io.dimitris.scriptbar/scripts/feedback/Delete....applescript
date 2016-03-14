@@ -1,3 +1,4 @@
+# Strikes through the selection and pops up a dialog to enter a justification
 tell application "Skim"
 	activate
 	

@@ -1,3 +1,4 @@
+# Adds a "citation(s) required" comment
 tell application "Skim"
 	activate
 	
