@@ -28,6 +28,7 @@
 			<arg line="create -srcfolder dist/ScriptBar.app dist/ScriptBar.dmg"/>
 		</exec>
 		
+		
 	</target>
 
 </project>
