@@ -7,7 +7,7 @@ tell application "Skim"
 	end if
 	
 	tell document 1
-		set noteText to "I'm not sure I understand this"
+		set noteText to "Incomplete citation"
 		make note with properties {type:highlight note, selection:selection, text:noteText, color:cyan}
 	end tell
 	

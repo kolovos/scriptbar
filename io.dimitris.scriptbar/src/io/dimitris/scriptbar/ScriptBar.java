@@ -9,12 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,10 +23,16 @@ import java.util.TimerTask;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileFilter;
 
 import org.apache.commons.lang3.text.WordUtils;
 import org.eclipse.epsilon.egl.EglTemplateFactory;
@@ -40,6 +45,7 @@ public class ScriptBar extends JDialog {
 	
 	protected String directory = "scripts";
 	protected GridLayout gridLayout = new GridLayout(1,1);
+	protected File defaultDirectory = null;
 	
 	public static void main(String[] args) throws Exception {
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -138,6 +144,7 @@ public class ScriptBar extends JDialog {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							
+					        
 							new Timer().schedule(new TimerTask() {
 								
 								@Override
@@ -147,24 +154,77 @@ public class ScriptBar extends JDialog {
 											runAppleScript(file);
 										}
 										else {
-											String result = (runEgl(file) + "").trim();
-											StringSelection stringSelection = new StringSelection(result);
-											Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
-											clpbrd.setContents(stringSelection, null);
+											
+											//Create the popup menu.
+									        final JPopupMenu popup = new JPopupMenu();
+									        popup.add(new JMenuItem(new AbstractAction("Copy to clipboard") {
+									            public void actionPerformed(ActionEvent e) {
+									            	try {
+										            	String result = (runEgl(file) + "").trim();
+														StringSelection stringSelection = new StringSelection(result);
+														Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
+														clpbrd.setContents(stringSelection, null);
+									            	}
+									            	catch (Exception ex) {
+									            		handleScriptException(file, ex);
+									            	}
+									            }
+									        }));
+									        popup.add(new JMenuItem(new AbstractAction("Save as ...") {
+									            public void actionPerformed(ActionEvent e) {
+									                JFileChooser chooser = new JFileChooser();
+									                
+									                if (defaultDirectory != null) chooser.setCurrentDirectory(defaultDirectory);
+									                chooser.setFileFilter(new FileFilter() {
+														
+														@Override
+														public String getDescription() {
+															return "Files";
+														}
+														
+														@Override
+														public boolean accept(File f) {
+															return !file.isDirectory();
+														}
+													});
+									                
+									                int option = chooser.showDialog(ScriptBar.this, "OK");
+									                if (option == JFileChooser.APPROVE_OPTION) {
+									                	try {
+										                	File selectedFile = chooser.getSelectedFile();
+										                	boolean save = true;
+										                	if (selectedFile.exists()) {
+										                		
+										                		int confirmation = JOptionPane.
+										                				showConfirmDialog(ScriptBar.this, "File already exists. Overwrite?", 
+										                						"ScriptBar", JOptionPane.YES_NO_OPTION);
+										                		
+										                		if (JOptionPane.YES_OPTION != confirmation) {
+										                			save = false;
+										                		}
+										                	}
+										                	
+										                	if (save) {
+										                		defaultDirectory = selectedFile.getParentFile();
+											                	String result = (runEgl(file) + "").trim();
+											                	FileOutputStream fos = new FileOutputStream(chooser.getSelectedFile());
+											                	fos.write(result.getBytes());
+											                	fos.close();
+										                	}
+									                	}
+									                	catch (Exception ex) {
+										            		handleScriptException(file, ex);
+										            	}
+									                }
+									            }
+									        }));
+									        
+									        popup.show(button, button.getWidth(), 2);
+											
+											
 										}
 									} catch (Exception ex) {
-										
-										Throwable t;
-										
-										if (ex instanceof EglRuntimeException) {
-											t = ex.getCause();
-										}
-										else {
-											t = ex;
-										}
-										
-										GrowlEngine.getInstance().show(file.getName(), t.getMessage());
-										ex.printStackTrace();
+										handleScriptException(file, ex);
 									}
 								}
 							}, 0);
@@ -179,6 +239,20 @@ public class ScriptBar extends JDialog {
 		
 		gridLayout.setRows(buttons.size()+1);;
 		this.pack();
+	}
+	
+	protected void handleScriptException(File file, Exception ex) {
+		Throwable t;
+		
+		if (ex instanceof EglRuntimeException) {
+			t = ex.getCause();
+		}
+		else {
+			t = ex;
+		}
+		
+		GrowlEngine.getInstance().show(file.getName(), t.getMessage());
+		ex.printStackTrace();
 	}
 	
 	public Object runAppleScript(File scriptFile) throws Exception {

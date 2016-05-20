@@ -10,13 +10,28 @@ for (page in t_page.all) {
 
 [%}%]
 
-Minor comments
+Detailed comments
 ---
-[%for (note in notes.reject(n|n.isReview())){%]
+[%for (note in notes.select(n|n.isMajor())){%]
+Page [%=note.parentNode.i_number%]: [%=note.e_text.text%]
+[%}%]
+
+Minor issues
+---
+[%for (note in notes.select(n|n.isMinor())){%]
 Page [%=note.parentNode.i_number%]: [%=note.e_text.text%]
 [%}%]
 [%
 operation t_note isReview() {
-	return self.e_color.i_red = 8541;
+	return not self.isMinor() and not self.isMajor();
 }
+
+operation t_note isMinor() {
+	return self.e_color.i_red = 65535;
+}
+
+operation t_note isMajor() {
+	return self.e_color.i_red = 8372;
+}
+
 %]
