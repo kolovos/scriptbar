@@ -13,7 +13,10 @@ for (page in t_page.all) {
 Detailed comments
 ---
 [%for (note in notes.select(n|n.isMajor())){%]
-Page [%=note.parentNode.i_number%]: [%=note.e_text.text%]
+[%if(not note.e_text.text.startsWith("Column")){%]Page [%=note.parentNode.i_number%]: [%=note.e_text.text%]
+[%}%]
+[%else{%]Page [%=note.parentNode.i_number%], [%=note.e_text.text%]
+[%}%]
 [%}%]
 
 Minor issues
