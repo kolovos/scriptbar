@@ -10,7 +10,7 @@ tell application "Skim"
 		set selectedText to get text for (get selection)
 		set firstToLowerCase to do shell script "echo " & character 1 of selectedText & " | tr [:upper:] [:lower:]"
 		set firstToLowerCase to firstToLowerCase & characters 2 through -1 of selectedText
-		set noteText to selectedText & " -> " & firstToLowerCase
+		set noteText to firstToLowerCase
 		make note with properties {type:highlight note, selection:selection, text:noteText}
 	end tell
 

@@ -8,7 +8,6 @@ tell application "Skim"
 	tell document 1
 		set selectedText to ((get text for (get selection)) as string)
 		set noteText to the text returned of (display dialog "Replace '" & selectedText & "' with" default answer selectedText)
-		set noteText to selectedText & " -> " & noteText
 		make note with properties {type:highlight note, selection:selection, text:noteText}
 	end tell
 

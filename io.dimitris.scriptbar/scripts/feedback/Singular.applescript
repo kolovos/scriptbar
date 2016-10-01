@@ -13,7 +13,7 @@ tell application "Skim"
 		else
 			set singular to ((characters 1 thru -2 of selectedText) as string)
 		end if
-		set noteText to selectedText & " -> " & singular
+		set noteText to singular
 		make note with properties {type:highlight note, selection:selection, text:noteText}
 	end tell
 

@@ -10,20 +10,15 @@ for (page in t_page.all) {
 
 [%}%]
 
-Detailed comments
+Minor issues
 ---
-[%for (note in notes.select(n|n.isMajor())){%]
+[%for (note in notes.select(n|n.isMajor() or n.isMinor())){%]
 [%if(not note.e_text.text.startsWith("Column")){%]Page [%=note.parentNode.i_number%]: [%=note.e_text.text%]
 [%}%]
 [%else{%]Page [%=note.parentNode.i_number%], [%=note.e_text.text%]
 [%}%]
 [%}%]
 
-Minor issues
----
-[%for (note in notes.select(n|n.isMinor())){%]
-Page [%=note.parentNode.i_number%]: [%=note.e_text.text%]
-[%}%]
 [%
 operation t_note isReview() {
 	return not self.isMinor() and not self.isMajor();

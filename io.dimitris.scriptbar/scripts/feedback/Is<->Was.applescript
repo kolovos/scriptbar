@@ -19,7 +19,7 @@ tell application "Skim"
 		else
 			return
 		end if
-		set noteText to selectedText & " -> " & replacement
+		set noteText to replacement
 		make note with properties {type:highlight note, selection:selection, text:noteText}
 	end tell
 

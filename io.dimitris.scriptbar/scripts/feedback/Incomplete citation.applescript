@@ -8,7 +8,7 @@ tell application "Skim"
 	
 	tell document 1
 		set noteText to "Incomplete citation"
-		make note with properties {type:highlight note, selection:selection, text:noteText, color:cyan}
+		make note with properties {type:highlight note, selection:selection, text:noteText}
 	end tell
 	
 end tell

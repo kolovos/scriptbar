@@ -8,8 +8,8 @@ tell application "Skim"
 	
 	tell document 1
 		set selectedText to get text for (get selection)
-		set noteText to selectedText & " -> " & "citation(s) required"
-		make note with properties {type:highlight note, selection:selection, text:noteText}
+		set noteText to "Citation(s) required"
+		make note with properties {type:highlight note, selection:selection, text:noteText, color:cyan}
 	end tell
 	
 end tell

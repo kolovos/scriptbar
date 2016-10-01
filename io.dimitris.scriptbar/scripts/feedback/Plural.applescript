@@ -13,7 +13,7 @@ tell application "Skim"
 		else
 			set plural to selectedText & "s"
 		end if
-		set noteText to selectedText & " -> " & plural
+		set noteText to plural
 		make note with properties {type:highlight note, selection:selection, text:noteText}
 	end tell
 
