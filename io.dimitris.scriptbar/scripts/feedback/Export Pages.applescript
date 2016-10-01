@@ -18,10 +18,13 @@ tell application "Skim"
 	end repeat
 	
 	
-	set fileName to file of document 1
-	set posixFileName to POSIX path of fileName
+	set filename to file of document 1
+	set posixFileName to POSIX path of filename
 	set exportedFileName to posixFileName & ".exported.pdf"
-	set redactedFileName to posixFileName & ".redacted.pdf"
+	#set redactedFileName to posixFileName & ".redacted.pdf"
+	
+	tell application "Finder" to set containerFolder to (get container of (filename as alias))
+	set redactedFileName to POSIX path of ((choose file name with prompt "Save as file" default name "exported.pdf" default location (containerFolder as alias)))
 	
 	save document 1 as "PDF With Embedded Notes" in exportedFileName
 	
