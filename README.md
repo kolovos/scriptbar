@@ -7,3 +7,6 @@ ScriptBar is an always-on-top app for Mac OS X, through which you can run AppleS
 * ScriptBar is a Java application so you'll need to have Java installed on your Mac
 * The built-in templates of ScriptBar only work with the Skim PDF viewer
 * To make use of the "Feedback/Export Pages" script, you need to install the PDFTK utility from https://www.pdflabs.com/tools/pdftk-server/
+
+## Download
+The latest version of ScriptBar is available here: https://dl.dropboxusercontent.com/u/5636547/scriptbar/ScriptBar.dmg
