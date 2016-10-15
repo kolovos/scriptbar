@@ -21,15 +21,17 @@ public class AppleScriptEngine {
 		engine = mgr.getEngineByName("AppleScript");
 	}
 	
-	public void eval(String... lines) throws ScriptException {
+	public void eval(String... lines) throws Exception {
 		String script = "";
 		for (String line : lines) {
 			script = script + line + "\n";
 		}
 		try {
-			engine.eval(script);
+			//engine.eval(script);
+			String[] args = new String[]{"osascript", "-e", script};
+			Runtime.getRuntime().exec(args);
 		}
-		catch (ScriptException ex) {
+		catch (Exception ex) {
 			System.out.println(ex.getMessage());
 			System.out.println(script);
 			throw ex;

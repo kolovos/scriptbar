@@ -9,7 +9,7 @@
 			<fileset dir="bin"/>
 		</jar>
 		
-		<delete file="dist/ScriptBar.dmg"/>
+		<delete file="/Users/dkolovos/Dropbox/Public/scriptbar/ScriptBar.dmg"/>
 		<delete dir="dist/ScriptBar.app"/>
 
 		<bundleapp outputdirectory="dist" name="ScriptBar" displayname="ScriptBar" identifier="ScriptBar" mainclassname="io.dimitris.scriptbar.ScriptBar" icon="resources/scriptbar.icns">
@@ -25,7 +25,7 @@
 		<copydir src="scripts" dest="dist/ScriptBar.app/Contents/Home/scripts"/>
 		
 		<exec executable="hdiutil">
-			<arg line="create -srcfolder dist/ScriptBar.app dist/ScriptBar.dmg"/>
+			<arg line="create -srcfolder dist/ScriptBar.app /Users/dkolovos/Dropbox/Public/scriptbar/ScriptBar.dmg"/>
 		</exec>
 		
 		

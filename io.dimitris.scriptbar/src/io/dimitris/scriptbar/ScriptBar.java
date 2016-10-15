@@ -112,7 +112,11 @@ public class ScriptBar extends JDialog {
 			for (final String extension : new String[]{"applescript", "egl"}) {
 				
 				if (file.getName().endsWith("." + extension) && !file.getName().startsWith("_")) {
-					final JButton button = new JButton(file.getName().replace("." + extension, ""));
+					final JButton button = new JButton(file.getName().replace("." + extension, "").
+							replace("<->", " ↔ ").
+							replace("->", " → ").
+							replace("<-", " ← ")
+							);
 					
 					try {
 						BufferedReader br = new BufferedReader(new FileReader(file));

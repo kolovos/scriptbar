@@ -1,6 +1,5 @@
 package io.dimitris.scriptbar;
 
-import javax.script.ScriptException;
 
 public class GrowlEngine {
 	
@@ -18,22 +17,14 @@ public class GrowlEngine {
 	}
 	
 	public void show(Object title, Object description) {
-		
-		String applicationName = "ScriptBar";
-		
+
 		try {
 			AppleScriptEngine.getInstance().eval(
-				"tell application id \"com.Growl.GrowlHelperApp\"",
-				"	set the allNotificationsList to {\"Notification\"}",	
-				"	set the enabledNotificationsList to {\"Notification\"}",
-				"	register as application \""+ applicationName + "\" all notifications allNotificationsList default notifications allNotificationsList",
-				"	notify with name \"Notification\" title \"" + title + "\" description \"" + description + "\" application name \"" + applicationName + "\"",
-				"end tell"	
+				"display notification \"" + description + "\" with title \"" + title + "\"", "delay 1"	
 			);
-		} catch (ScriptException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		
 	}
 	
