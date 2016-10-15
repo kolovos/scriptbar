@@ -27,9 +27,7 @@ public class AppleScriptEngine {
 			script = script + line + "\n";
 		}
 		try {
-			//engine.eval(script);
-			String[] args = new String[]{"osascript", "-e", script};
-			Runtime.getRuntime().exec(args);
+			engine.eval(script);
 		}
 		catch (Exception ex) {
 			System.out.println(ex.getMessage());

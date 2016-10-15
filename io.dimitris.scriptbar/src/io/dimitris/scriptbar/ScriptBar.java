@@ -255,7 +255,7 @@ public class ScriptBar extends JDialog {
 			t = ex;
 		}
 		
-		GrowlEngine.getInstance().show(file.getName(), t.getMessage());
+		NotificationEngine.getInstance().show(file.getName(), t.getMessage());
 		ex.printStackTrace();
 	}
 	
@@ -288,7 +288,7 @@ public class ScriptBar extends JDialog {
 			throw new RuntimeException(module.getParseProblems().get(0).toString());
 		}
 		
-		module.getContext().getFrameStack().put(Variable.createReadOnlyVariable("growl", GrowlEngine.getInstance()));
+		module.getContext().getFrameStack().put(Variable.createReadOnlyVariable("growl", NotificationEngine.getInstance()));
 		
 		if (model != null) {
 			module.getContext().getModelRepository().addModel(model);
