@@ -1,0 +1,11 @@
+[%
+var notes : Sequence;
+
+for (page in t_page.all) {
+	notes.addAll(page.c_note.sortBy(n|n.e_bounds.i_y));
+}
+%]
+
+[%for (note in notes){%]
+Page [%=note.parentNode.i_number%]: [%=note.e_selection.text%] -> [%=note.e_text.text%]
+[%}%]
