@@ -58,6 +58,7 @@ public class ScriptBar extends JDialog {
 		File[] profiles = new File(directory).getCanonicalFile().listFiles();
 		
 		JComboBox<Object> comboBox = new JComboBox<Object>(profiles);
+		comboBox.putClientProperty("JComboBox.isPopDown", Boolean.TRUE);
 		getContentPane().add(comboBox);
 		comboBox.setRenderer(new FileCellRenderer(comboBox.getRenderer()));
 		
