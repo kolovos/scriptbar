@@ -17,12 +17,12 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -41,6 +41,8 @@ import org.eclipse.epsilon.egl.exceptions.EglRuntimeException;
 import org.eclipse.epsilon.emc.plainxml.PlainXmlModel;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 
+import apple.applescript.AppleScriptEngine;
+
 public class ScriptBar extends JDialog {
 	
 	protected String directory = "scripts";
@@ -56,6 +58,13 @@ public class ScriptBar extends JDialog {
 	protected void run() throws Exception {
 		
 		File[] profiles = new File(directory).getCanonicalFile().listFiles();
+		
+		Arrays.sort(profiles, new Comparator<File>() {
+			@Override
+			public int compare(File f1, File f2) {
+				return f1.getName().compareTo(f2.getName());
+			}
+		});
 		
 		JComboBox<Object> comboBox = new JComboBox<Object>(profiles);
 		comboBox.putClientProperty("JComboBox.isPopDown", Boolean.TRUE);
@@ -82,7 +91,8 @@ public class ScriptBar extends JDialog {
 		
 		this.getContentPane().setLayout(gridLayout);
 		//this.setTitle("ScriptBar");
-		this.setBounds(100, 100, 500, 500);
+		this.setBounds((int)getToolkit().getScreenSize().getWidth() - 300, 200, 200, 500);
+		
 		this.setAlwaysOnTop(true);
 		this.setResizable(false);
 		setProfile(profiles[0]);
@@ -261,7 +271,7 @@ public class ScriptBar extends JDialog {
 	}
 	
 	public Object runAppleScript(File scriptFile) throws Exception {
-		ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("AppleScript");
+		AppleScriptEngine scriptEngine = new AppleScriptEngine();
 		String script = new Scanner(scriptFile).useDelimiter("\\Z").next();
 		script = "with timeout of 3600 seconds\n" + script + "\n" + "end timeout";
 		return scriptEngine.eval(script);
