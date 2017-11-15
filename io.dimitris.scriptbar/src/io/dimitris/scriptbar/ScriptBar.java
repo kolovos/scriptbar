@@ -118,7 +118,15 @@ public class ScriptBar extends JDialog {
 		
 		// Add new buttons
 		
-		for (final File file :  profile.getCanonicalFile().listFiles()) {
+		File[] files = profile.getCanonicalFile().listFiles();
+		Arrays.sort(files, new Comparator<File>() {
+			@Override
+			public int compare(File f1, File f2) {
+				return f1.getName().compareTo(f2.getName());
+			}
+		});
+		
+		for (final File file :  files) {
 			
 			for (final String extension : new String[]{"applescript", "egl"}) {
 				
