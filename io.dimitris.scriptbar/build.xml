@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="ButtonDemo" default="default" basedir=".">
 
-	<taskdef name="bundleapp" classname="com.oracle.appbundler.AppBundlerTask" classpath="lib/appbundler-1.0.jar" />
+	<taskdef name="bundleapp" classname="com.oracle.appbundler.AppBundlerTask" classpath="lib/appbundler-1.0ea.jar" />
 
 	<target name="default">
 
@@ -25,9 +25,8 @@
 		<copydir src="scripts" dest="dist/ScriptBar.app/Contents/Home/scripts"/>
 		
 		<exec executable="hdiutil">
-			<arg line="create -srcfolder dist/ScriptBar.app /Users/dkolovos/Dropbox/Public/scriptbar/ScriptBar.dmg"/>
+			<arg line="create -srcfolder dist/ScriptBar.app dist/ScriptBar.dmg"/>
 		</exec>
-		
 		
 	</target>
 
