@@ -9,8 +9,9 @@
 			<fileset dir="bin"/>
 		</jar>
 		
-		<delete file="/Users/dkolovos/Dropbox/Public/scriptbar/ScriptBar.dmg"/>
+		<!--delete file="/Users/dkolovos/Dropbox/Public/scriptbar/ScriptBar.dmg"/-->
 		<delete dir="dist/ScriptBar.app"/>
+		<delete file="dist/ScriptBar.dmg"/>
 
 		<bundleapp outputdirectory="dist" name="ScriptBar" displayname="ScriptBar" identifier="ScriptBar" mainclassname="io.dimitris.scriptbar.ScriptBar" icon="resources/scriptbar.icns">
 			<classpath file="dist/io.dimitris.scriptbar.jar"/>

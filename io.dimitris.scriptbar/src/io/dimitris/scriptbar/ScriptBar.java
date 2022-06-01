@@ -95,7 +95,13 @@ public class ScriptBar extends JDialog {
 		
 		this.setAlwaysOnTop(true);
 		this.setResizable(false);
-		setProfile(profiles[0]);
+		
+		for (File f : profiles) {
+			if (f.isDirectory()) {
+				setProfile(f);
+				break;
+			}
+		}
 		
 		this.setVisible(true);
 	}
@@ -119,6 +125,7 @@ public class ScriptBar extends JDialog {
 		// Add new buttons
 		
 		File[] files = profile.getCanonicalFile().listFiles();
+		
 		Arrays.sort(files, new Comparator<File>() {
 			@Override
 			public int compare(File f1, File f2) {
