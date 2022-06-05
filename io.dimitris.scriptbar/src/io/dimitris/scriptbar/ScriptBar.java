@@ -57,7 +57,13 @@ public class ScriptBar extends JDialog {
 	@SuppressWarnings("unchecked")
 	protected void run() throws Exception {
 		
-		File[] profiles = new File(directory).getCanonicalFile().listFiles();
+		File[] profiles = new File(directory).getCanonicalFile().listFiles(new java.io.FileFilter() {
+			
+			@Override
+			public boolean accept(File pathname) {
+				return pathname.isDirectory();
+			}
+		});
 		
 		Arrays.sort(profiles, new Comparator<File>() {
 			@Override
@@ -95,13 +101,7 @@ public class ScriptBar extends JDialog {
 		
 		this.setAlwaysOnTop(true);
 		this.setResizable(false);
-		
-		for (File f : profiles) {
-			if (f.isDirectory()) {
-				setProfile(f);
-				break;
-			}
-		}
+		setProfile(profiles[0]);
 		
 		this.setVisible(true);
 	}
