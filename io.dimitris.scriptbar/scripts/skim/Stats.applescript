@@ -1,8 +1,8 @@
 tell application "Skim"
 	
 	set docName to name of document 1
-	set docText to (get text for document 1) as string
-	set selText to ((get text for (get selection of document 1)) as string)
+	set docText to get text of document 1 as string
+	set selText to get selection of document 1 as string
 	
 	
 	
@@ -15,8 +15,8 @@ tell application "Skim"
 		set docParas to count of paragraphs of docText
 	end if
 	
-	set docTextInfo to "Lines in document: " & docParas & return & Â¬
-		"Words in document: " & docWords & return & Â¬
+	set docTextInfo to "Lines in document: " & docParas & return & Â
+		"Words in document: " & docWords & return & Â
 		"Characters in document: " & docChars
 	set docInfoMsg to docTextInfo
 	
@@ -35,8 +35,8 @@ tell application "Skim"
 			-- two lines highlighted, so script should agreee with that. 
 			set selParas to selParas - 1
 		end if
-		set selTextInfo to "Lines in selection: " & selParas & return & Â¬
-			"Words in selection: " & selWords & return & Â¬
+		set selTextInfo to "Lines in selection: " & selParas & return & Â
+			"Words in selection: " & selWords & return & Â
 			"Characters in selection: " & selChars
 		set docInfoMsg to docInfoMsg & return & return & selTextInfo
 	end if

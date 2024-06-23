@@ -7,7 +7,7 @@ tell application "Skim"
 	end if
 
 	tell document 1
-		set selectedText to get text for (get selection)
+		set selectedText to get selection as string
 		set firstToLowerCase to do shell script "echo " & character 1 of selectedText & " | tr [:upper:] [:lower:]"
 		set firstToLowerCase to firstToLowerCase & characters 2 through -1 of selectedText
 		set noteText to firstToLowerCase

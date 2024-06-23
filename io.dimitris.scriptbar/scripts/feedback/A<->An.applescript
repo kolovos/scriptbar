@@ -7,7 +7,7 @@ tell application "Skim"
 	end if
 	
 	tell document 1
-		set selectedText to ((get text for (get selection)) as string)
+		set selectedText to get selection as string
 		
 		if (selectedText is equal to "a") then
 			set replacement to "an"
