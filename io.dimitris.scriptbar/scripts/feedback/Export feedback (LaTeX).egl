@@ -1,0 +1,13 @@
+[%
+var notes : Sequence;
+
+for (page in t_page.all) {
+	notes.addAll(page.c_note.sortBy(n|n.e_bounds.i_y));
+}
+%]
+
+\begin{itemize}
+[%for (note in notes){%]
+\item Page [%=note.parentNode.i_number%]: \emph{[%=note.e_selection.text%]} $\rightarrow$ [%=note.e_text.text%]
+[%}%]
+\end{itemize}
